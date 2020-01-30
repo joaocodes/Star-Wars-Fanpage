@@ -1,6 +1,7 @@
 const getState = ({ getStore, getActions, setStore }) => {
 	return {
 		store: {
+			people: [],
 			demo: [
 				{
 					title: "FIRST",
@@ -15,14 +16,26 @@ const getState = ({ getStore, getActions, setStore }) => {
 			]
 		},
 		actions: {
+			changeCard: item => {
+				//get the store
+				const store = getStore();
+
+				const demo = store.characters.map(item => {
+					return item;
+				});
+
+				//reset the global store
+				setStore({ demo: demo });
+			},
+
 			// Use getActions to call a function within a fuction
 			exampleFunction: () => {
 				getActions().changeColor(0, "green");
 			},
-			loadSomeData: () => {
-				/**
-					fetch().then().then(data => setStore({ "foo": data.bar }))
-				*/
+			loadSomeData: (endpoint, storeLocation) => {
+				fetch(endpoint)
+					.then(response => response.json())
+					.then(data => setStore({ [storeLocation]: data.results }));
 			},
 			changeColor: (index, color) => {
 				//get the store
